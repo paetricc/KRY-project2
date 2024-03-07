@@ -146,7 +146,14 @@ void sha256(const char *text) {
     int k = (448 - l_bits - 1) % 512;
 
     size_t padding = l_bytes + 1 + (k / BYTE) + 8;
+    printf("Alokace pro padded_msg, požadovaná velikost: %zu bytes\n", padding);
     unsigned char *padded_msg = (unsigned char *) calloc(padding, sizeof(unsigned char));
+    if(!padded_msg) {
+        fprintf(stderr, "Chyba ve funkci calloc().\n");
+    } else {
+        printf("Alokace pro padded_msg úspěšná, velikost: %zu bytes\n", padding);
+    }
+
     if(!padded_msg) {
         fprintf(stderr, "Chyba ve funkci calloc().");
         exit(EXIT_FAILURE);
@@ -158,7 +165,14 @@ void sha256(const char *text) {
     }
     //print_bits(padding, padded_msg);
     int r = padding*8/512;
+    printf("Alokace pro blocks, požadovaný počet: %d, velikost: %zu bytes\n", r * 16, r * 16 * sizeof(uint32_t));
+
     uint32_t (*blocks)[16] = (uint32_t *) calloc(r * 16, sizeof(uint32_t));
+    if(!blocks) {
+        fprintf(stderr, "Chyba ve funkci calloc().\n");
+    } else {
+        printf("Alokace pro blocks úspěšná, počet: %d, velikost: %zu bytes\n", r * 16, r * 16 * sizeof(uint32_t));
+    }
 
     // Kopírujeme data do bloků
     for (size_t row = 0; row < r; ++row) {
