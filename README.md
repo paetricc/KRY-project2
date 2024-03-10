@@ -14,8 +14,25 @@ Níže jsou popsány základní části implementace. Detailnější popis imple
 souborech **kry.c/h**, přičemž v hlavičkovém souboru jsou popsány jednotlivé funkce.
 
 ### SHA-256
+Implementace hashovacího algoritmu SHA-256 je založena na specifikaci [1]. Algoritmus iterativně zpracovává bloky dat 
+o velikosti 512 bitů, na které aplikuje danou posloupnost rovnic a bitových operací (AND, OR, XOR, rotace, posuv, ...). 
+Výsledkem těchto operací je 256bitový hash, který je počítán následovně:
+
+1. **Inicializace:** Na počátku výpočtu jsou nastaveny iniciální hodnoty hashe dle standardu. 
+2. **Zpracování bloků:** Podmínkou pro aplikaci hlavní smyčky je nutnost, aby velikost textu byla násobkem 512bitů. 
+   Text je tedy doplněn o padding, respektive je za text připojena bitová 1, za ní je připojena posloupnost bitových 0, 
+   kde je jejich počet dán vzorcem `(448 - l_bits - 1) % 512`, kde l_bits je velikost vstupního textu v bitech a následně 
+   je za ně připojena 8bytová část v big endian formátu obsahující velikost vstupního textu v bitech.
+3. **Hlavní smyčka:** Hlavní smyčka algoritmu iterativně aplikuje postupně na každý blok algoritmus SHA-256, kde iniciální 
+   hash následujícího bloku je dán hashem předcházejícího bloku vyjma prvního bloku, kde je iniciální hash dán standardem. 
+4. **Finální hash:** Po zpracování všech bloků vstupního textu algoritmus vrací finální hash hodnotu.
 
 ### MAC (Message Authentication Code)
+Implementace generování MAC vychází ze vzorce `MAC = SHA256(SECRET_KEY + MSG)` a to konkrétně následovně: 
+
+1. **Tajný klíč + vstupní textu**: Po řadě je za sebe připojen tajný klíč a vstupní text.
+2. **Výpočet hash**: Na spojený řetězec tajného klíče a vstupního textu je aplikována funkce SHA-256.
+3. **Výsledek**: Výsledkem aplikace této funkce nad daným řetězcem s tajným klíčem je MAC.
 
 ### Ověření MAC
 
