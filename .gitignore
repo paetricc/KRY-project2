@@ -1,5 +1,6 @@
 kry
 .idea
+sha256test.py
 
 # Prerequisites
 *.d

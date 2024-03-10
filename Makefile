@@ -8,7 +8,6 @@ EXECUTABLE=kry
 CC=gcc
 CFLAGS=-fsanitize=address -fsanitize=leak -g -Wall -pedantic -Wextra
 
-
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(EXECUTABLE).o
