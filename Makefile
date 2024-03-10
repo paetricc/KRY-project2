@@ -6,7 +6,7 @@
 
 EXECUTABLE=kry
 CC=gcc
-CFLAGS=-fsanitize=address -fsanitize=leak -g -Wall -pedantic -Wextra
+CFLAGS=-fsanitize=address -fsanitize=leak -Wall -pedantic -Wextra
 
 all: $(EXECUTABLE)
 

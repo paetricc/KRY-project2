@@ -3,11 +3,15 @@
  * Login: xbartu11 (230653)
  * Email: xbartu11@stud.fit.vutbr.cz
  *
- * KRY Projekt 2: MAC za použití SHA-256 & Length
- * extension attack
+ * KRY Projekt 2: MAC za použití SHA-256 & Lengthextension attack
  *
  * Zdroj pro implementaci hashovacího algoritmu sha256:
  *   -[1] http://dx.doi.org/10.6028/NIST.FIPS.180-4
+ * Zdroje pro pochopení length extension attacku:
+ *   -[2] https://lord.io/length-extension-attacks/
+ *   -[3] https://bostik.iki.fi/dc4420/size_t-does-matter--hash-length-extensions.pdf
+ *   -[4] https://www.javacodegeeks.com/2012/07/hash-length-extension-attacks.html
+ *   -[5] https://github.com/viensea1106/hash-length-extension
  *******************************************************/
 
 #include "kry.h"
@@ -20,7 +24,7 @@ int main(int argc, char** argv) {
 
     if (argc == 1) {
         print_help();
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
     }
 
     while ((opt = getopt(argc, argv, "csvek:m:n:a:")) != -1) {
@@ -115,7 +119,7 @@ bool do_mac_verify(const char *key, const char *chs) {
     mac(text, key, hash, text_len); // výpočet MAC (Message Authentication Code)
     free(text);
 
-    return verify_mac(hash, chs); // ověření shodnosti hashů
+    return mac_verify(hash, chs); // ověření shodnosti hashů
 }
 
 void do_extension(const char *chs, char* msg, const int num) {
@@ -269,7 +273,7 @@ void mac(char *text, const char *key, uint32_t hash[8], size_t text_len) {
     free(key_text);
 }
 
-bool verify_mac(uint32_t hash[8], const char *chs_hash) {
+bool mac_verify(uint32_t hash[8], const char *chs_hash) {
     // kontrola zda vstupní řetězec má požadovanou délku
     if (strlen(chs_hash) != HASH_LEN) {
         fprintf(stderr, "Vstupní hash nemá požadovanou délku.\n");
@@ -387,11 +391,11 @@ void print_help() {
     printf("MOŽNOSTI\n");
     printf("    -c\n");
     printf("          Vypočet hashe vstupní zprávy.\n");
-    printf("    -s -k KLÍČ\n");
-    printf("          Generace MAC (Message Authentication Code) ze vstupní zprávy a tajného klíče\n");
-    printf("    -v -k KLÍČ -m MAC\n");
-    printf("          Ověří MAC pro vstupní zprávu a tajný klíč.\n");
-    printf("    -e -n DÉLKA_KLÍČE -a PŘÍDANÝ_TEXT -m MAC\n");
+    printf("    -s -k <klic>\n");
+    printf("          Generování MAC (Message Authentication Code) ze vstupní zprávy a tajného klíče.\n");
+    printf("    -v -k <klic> -m <mac>\n");
+    printf("          Ověření MAC pro vstupní zprávu a tajný klíč.\n");
+    printf("    -e -n <delka_klice> -a <pridany_text> -m <mac>\n");
     printf("          Aplikace length extension attacku.\n\n");
 
     printf("PŘÍKLADY\n");
