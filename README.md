@@ -35,11 +35,29 @@ Implementace generování MAC vychází ze vzorce `MAC = SHA256(SECRET_KEY + MSG
 3. **Výsledek**: Výsledkem aplikace této funkce nad daným řetězcem s tajným klíčem je MAC.
 
 ### Ověření MAC
+Implementace ověření MAC funguje následovně:
+
+1. **Generování MAC**: Je vygenerován MAC dle popisgu generování MAC výše.
+2. **Porovnání**: Vygenerovaný MAC se porovná s dodaným MAC a pokud se oba MAC shodují, tak daný hash byl vygenerovaný pomocí tajného klíče.
 
 ### Length extension attack
+Tento útok využívá vlastnosti některých hashovací algoritmů, jako je SHA-256, kde tyto algoritmy umožňují vypočítat 
+validní MAC, kde je původní zpráva rozšířena o určitý text, bez znalosti tajného klíče (je potřeba znát pouze jeho délku). 
+Implementace tohoto typu útoku má je založena na [2,3,4,5] a má následující princip: 
+
+1. **Výchozí stav**: Na začátku výpočtu je třeba znát původní zprávu, MAC této zprávy a délku klíče.
+2. **Rozšíření zprávy**: Za prázdné místo o velikosti klíče se připojí původní text a následně se vypočítá paddin, pokud 
+   je potřeba. Za takto vytvořený blok se připojí si rozšířený text (útočníkův text) a následně se opět přidá padding pokud je potřeba.
+3. **Výpočet MAC**: Nad tímto vytvořeným blokem se aplikuje hashovací funkce SHA-256, která bude mít místo iniciálních stavů hashe 
+   uložen hash původní zprávy.
+
+Princip útoku využívá toho, že daný algoritmus zpracovává data po blocích a uchovává si mezivýpočty mezi jednotlovými 
+bloky (poslední mezivýpočet je výsledný hash). Je tedy možné použít známý hash jako výchozí bod pro výpočet hash pro 
+jakoukoli přidanou zprávu. Jinými slovy je možné díky znalosti původní zprávy, MAC této zprávy a délky tajného klíče 
+pokračovat ve výpočtu následujícího bloku (bloku s přidaným textem) i bez znalosti tajného klíče. 
 
 ## Spuštění
-* **-c:** Vypočet hashe vstupní zprávy.
+* **-c:** Výpočet hashe vstupní zprávy.
 * **-s -k \<klic\>:** Generování MAC (Message Authentication Code) ze vstupní zprávy a tajného klíče.
 * **-v -k \<klic\> -m \<mac\>:** Ověření MAC pro vstupní zprávu a tajný klíč.
 * **-e -n \<delka_klice\> -a \<pridany_text\> -m \<mac\>:** Aplikace length extension attacku.
