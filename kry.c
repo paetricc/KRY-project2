@@ -202,7 +202,7 @@ void sha256(unsigned char *text, uint32_t hash[8], ssize_t text_len, const uint3
         fprintf(stderr, "Chyba ve funkci calloc().\n");
         exit(EXIT_FAILURE);
     }
-    // do každého segmentu se vloží odpovídající 64bytů zprávy
+    // do každého segmentu se vloží odpovídající 64 bytů zprávy
     for (uint32_t seg_num = 0; seg_num < N; seg_num++)
         memcpy(segments[seg_num], padded_text + seg_num * SEGMENT_LEN, SEGMENT_LEN);
 
@@ -254,7 +254,7 @@ void sha256(unsigned char *text, uint32_t hash[8], ssize_t text_len, const uint3
         H[6] = g + H[6];
         H[7] = h + H[7];
     }
-    // překopírování výsledných čásí hashe
+    // překopírování výsledných částí hashe
     for (int i = 0; i < 8; i++)
         hash[i] = H[i];
 
@@ -264,7 +264,7 @@ void sha256(unsigned char *text, uint32_t hash[8], ssize_t text_len, const uint3
 
 void mac(char *text, const char *key, uint32_t hash[8], size_t text_len) {
     size_t key_length = strlen(key); // délka klíče
-    size_t total_length = key_length + text_len; // célková délka textu i s klíčem
+    size_t total_length = key_length + text_len; // celková délka textu i s klíčem
     // alokace paměti pro spojení klíče a textu
     unsigned char *key_text = do_calloc(total_length, sizeof(unsigned char), "Chyba alokace paměti ve funkci mac()");
     memcpy(key_text, key, key_length);             // překopírování klíče do paměti

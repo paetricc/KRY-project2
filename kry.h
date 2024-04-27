@@ -62,19 +62,19 @@ static const uint32_t H_0[8] = {
 };
 
 /**
- * Funkce, která přípravý potřebná data pro spuštění funkce hash()
+ * Funkce, která připraví potřebná data pro spuštění funkce hash()
  */
 void do_hash();
 
 /**
- * Funkce, která přípravý potřebná data pro spuštění funkce mac()
+ * Funkce, která připraví potřebná data pro spuštění funkce mac()
  *
  * @param key tajný klíč
  */
 void do_mac(const char *key);
 
 /**
- * Funkce, která přípravý potřebná data pro spuštění funkce mac_verify()
+ * Funkce, která připraví potřebná data pro spuštění funkce mac_verify()
  *
  * @param key tajný klíč
  * @param chs hash, který má být zkontrolován
@@ -83,7 +83,7 @@ void do_mac(const char *key);
 bool do_mac_verify(const char *key, const char *chs);
 
 /**
- * Funkce, která přípravý potřebná data pro spuštění funkce extension()
+ * Funkce, která připraví potřebná data pro spuštění funkce extension()
  *
  * @param chs hash původní zprávy
  * @param msg text, který má být přidán
@@ -129,12 +129,12 @@ unsigned char* do_padding(size_t text_len, size_t *padding_len);
  * @param size1 velikost první paměti
  * @param mem2 ukazatel na druhou paměť
  * @param size2 velikost druhé paměti
- * @return ukazel na nově vytvořenou paměť
+ * @return ukazatel na nově vytvořenou paměť
  */
 unsigned char* do_mem_merge(unsigned char* mem1, size_t size1, unsigned char* mem2, size_t size2);
 
 /**
- * Funkce, která alokuje paměť dle zadané velikost pomocí funkce calloc(), která inicialuzuje alokovanou paměť na 0.
+ * Funkce, která alokuje paměť dle zadané velikost pomocí funkce calloc(), která inicializuje alokovanou paměť na 0.
  * V případě chyby alokace na standardní chybový výstup vypíše zadaný chybový text. Výsledná paměť vypadá následovně:
  *
  * +--------------------------------+
@@ -151,20 +151,23 @@ unsigned char* do_mem_merge(unsigned char* mem1, size_t size1, unsigned char* me
 unsigned char* do_calloc(size_t mem_size, size_t size, const char *error_msg);
 
 /**
- * Funkce pro výpočet sha256 ze zadanáho textu
- *
+ * Funkce pro výpočet sha256 ze zadaného textu
+ * 
  * @param text vstupní text
  * @param hash pole pro uložení výsledného hashe
+ * @param text_len délka vstupního textu
+ * @param H iniciální hodnoty hashe
  */
 void sha256(unsigned char *text, uint32_t hash[8], ssize_t text_len, const uint32_t H[8]);
 
 /**
  * Funkce pro výpočet MAC (Message Authentication Code) pomocí sha256 kombinací zadaného textu a tajného klíče
  * pomocí funkce MAC = SHA256(SECRET_KEY + MSG).
- *
+ * 
  * @param text vstupní text
  * @param key tajný klíč
  * @param hash pole pro uložení výsledného mac
+ * @param text_len délka vstupního textu
  */
 void mac(char *text, const char *key, uint32_t hash[8], size_t text_len);
 
@@ -204,7 +207,7 @@ bool mac_verify(uint32_t hash[8], const char *chs_hash);
  *
  * @param key_len délka klíče
  * @param text vstupní text
- * @param chs_hash znamý hash
+ * @param chs_hash známý hash
  * @param extension text, který má být přidán
  */
 void extension(const uint32_t key_len, char *text, const char *chs_hash, char *extension);
