@@ -37,7 +37,7 @@ Implementace generování MAC vychází ze vzorce `MAC = SHA256(SECRET_KEY + MSG
 ### Ověření MAC
 Implementace ověření MAC funguje následovně:
 
-1. **Generování MAC**: Je vygenerován MAC dle popisgu generování MAC výše.
+1. **Generování MAC**: Je vygenerován MAC dle popisu generování MAC výše.
 2. **Porovnání**: Vygenerovaný MAC se porovná s dodaným MAC a pokud se oba MAC shodují, tak daný hash byl vygenerovaný pomocí tajného klíče.
 
 ### Length extension attack
@@ -46,12 +46,12 @@ validní MAC, kde je původní zpráva rozšířena o určitý text, bez znalost
 Implementace tohoto typu útoku má je založena na [2,3,4,5] a má následující princip: 
 
 1. **Výchozí stav**: Na začátku výpočtu je třeba znát původní zprávu, MAC této zprávy a délku klíče.
-2. **Rozšíření zprávy**: Za prázdné místo o velikosti klíče se připojí původní text a následně se vypočítá paddin, pokud 
+2. **Rozšíření zprávy**: Za prázdné místo o velikosti klíče se připojí původní text a následně se vypočítá padding, pokud 
    je potřeba. Za takto vytvořený blok se připojí si rozšířený text (útočníkův text) a následně se opět přidá padding pokud je potřeba.
 3. **Výpočet MAC**: Nad tímto vytvořeným blokem se aplikuje hashovací funkce SHA-256, která bude mít místo iniciálních stavů hashe 
    uložen hash původní zprávy.
 
-Princip útoku využívá toho, že daný algoritmus zpracovává data po blocích a uchovává si mezivýpočty mezi jednotlovými 
+Princip útoku využívá toho, že daný algoritmus zpracovává data po blocích a uchovává si mezivýpočty mezi jednotlivými 
 bloky (poslední mezivýpočet je výsledný hash). Je tedy možné použít známý hash jako výchozí bod pro výpočet hash pro 
 jakoukoli přidanou zprávu. Jinými slovy je možné díky znalosti původní zprávy, MAC této zprávy a délky tajného klíče 
 pokračovat ve výpočtu následujícího bloku (bloku s přidaným textem) i bez znalosti tajného klíče. 
