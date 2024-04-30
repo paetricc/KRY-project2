@@ -7,7 +7,7 @@
 LOGIN=230653
 EXECUTABLE=kry
 CC=gcc
-CFLAGS=-Wall -pedantic -Wextra
+CFLAGS=-fsanitize=address -fsanitize=leak -Wall -pedantic -Wextra
 
 all: $(EXECUTABLE)
 
