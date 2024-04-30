@@ -353,9 +353,15 @@ char* read_data(ssize_t *text_len) {
     size_t buffer_size = 0;
     *text_len = getdelim(&text, &buffer_size, EOF, stdin);
     if (*text_len == -1) {
-        fprintf(stderr, "Chyba při provádění funkce getdelim().");
-        free(text);
-        exit(EXIT_FAILURE);
+        // ošetření prázdného vstupu (`$ echo -ne ""`)
+        if (feof(stdin)) {
+            *text_len = 0;
+            return text;
+        } else {
+            fprintf(stderr, "Chyba při provádění funkce getdelim().");
+            free(text);
+            exit(EXIT_FAILURE);
+        }
     }
     return text;
 }
